@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { User } from '../../types';
 import { authService } from '../../services/authService';
+import { storageService } from '../../services/storageService';
 import { INITIAL_USERS } from '../../data/mockData';
 import { Isotype } from '../../components/ui/Isotype';
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../../auth/authConfig";
 
 interface LoginProps {
   onLoginSuccess: (user: User) => void;
@@ -15,6 +18,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [forgotNotice, setForgotNotice] = useState<string | null>(null);
+  const [isMsLoggingIn, setIsMsLoggingIn] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +30,75 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       onLoginSuccess(result.user);
     } else {
       setError(result.error || 'Credenciales no válidas.');
+    }
+  };
+
+  const { instance } = useMsal();
+
+  const handleMicrosoftLogin = async () => {
+    setError(null);
+    setForgotNotice(null);
+    setIsMsLoggingIn(true);
+    try {
+      // Use loginPopup instead of loginRedirect:
+      // loginPopup opens a clean top-level window where Entra ID authentication works seamlessly.
+      const response = await instance.loginPopup(loginRequest);
+
+
+      const account = response.account;
+      if (!account) {
+        throw new Error('No se recibió información de la cuenta de Microsoft.');
+      }
+
+      // Check if user exists in local storage
+      const users = storageService.getUsers();
+      const userEmail = (account.username || '').toLowerCase();
+      let matchedUser = users.find(u => u.email.toLowerCase() === userEmail);
+
+      if (!matchedUser) {
+        matchedUser = {
+          id: `ms_${account.homeAccountId || Date.now()}`,
+          name: account.name || account.username,
+          email: account.username,
+          company: 'Grupo Alviestetic',
+          role: 'admin',
+          assignedBrandIds: ['brand_1', 'brand_2', 'brand_3'],
+          status: 'active',
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString()
+        };
+        storageService.saveUsers([...users, matchedUser]);
+      }
+
+      storageService.setCurrentUserId(matchedUser.id);
+      storageService.addActivity({
+        userId: matchedUser.id,
+        userName: matchedUser.name,
+        action: 'login',
+        description: `Inicio de sesión con Microsoft 365 (${account.username})`
+      });
+
+      onLoginSuccess(matchedUser);
+    } catch (err: unknown) {
+      console.error('Error al iniciar sesión con Microsoft:', err);
+      const errStr = err instanceof Error ? err.message : String(err);
+      if (errStr.includes('user_cancelled')) {
+        setError('El inicio de sesión fue cancelado por el usuario.');
+      } else if (errStr.includes('popup_window_error') || errStr.includes('block')) {
+        setError('El navegador bloqueó la ventana emergente. Por favor, permite ventanas emergentes (popups) para este dominio e inténtalo de nuevo.');
+      } else {
+        setError(`Error Microsoft: ${errStr}`);
+      }
+    } finally {
+      setIsMsLoggingIn(false);
+    }
+  };
+
+  const handleAccess = async () => {
+    try {
+      await instance.loginRedirect(loginRequest);
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
   };
 
@@ -70,7 +143,38 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4">
+          {/* Microsoft 365 Login Button */}
+          <button
+            type="button"
+            onClick={handleMicrosoftLogin}
+            disabled={isMsLoggingIn}
+            className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-sm font-semibold transition-all shadow-xs mb-4 cursor-pointer disabled:opacity-60"
+          >
+            {isMsLoggingIn ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                <span>Conectando con Microsoft...</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 21 21">
+                  <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                  <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                  <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                  <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                </svg>
+                <span>Acceder con Microsoft 365</span>
+              </>
+            )}
+          </button>
+
+          <div className="flex items-center my-4">
+            <div className="flex-1 border-t border-slate-200"></div>
+            <span className="px-3 text-[11px] uppercase tracking-wider text-slate-400 font-medium">o con credenciales</span>
+            <div className="flex-1 border-t border-slate-200"></div>
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Correo electrónico profesional
@@ -121,7 +225,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           </div>
 
           <button
-            type="submit"
+            type="button"
+            onClick={handleAccess}
             className="w-full py-2.5 rounded-lg bg-slate-900 text-white text-sm font-semibold border-none cursor-pointer hover:bg-slate-800 transition-colors shadow-xs mt-2"
           >
             Acceder al Portal
@@ -148,11 +253,10 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                   </div>
                 </div>
                 <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    user.role === 'admin'
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-200 text-slate-700'
-                  }`}
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded ${user.role === 'admin'
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-200 text-slate-700'
+                    }`}
                 >
                   {user.role === 'admin' ? 'Admin' : 'Cliente'}
                 </span>

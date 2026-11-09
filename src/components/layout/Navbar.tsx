@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bell, RotateCcw, ChevronRight } from 'lucide-react';
 import { User } from '../../types';
+import { useMsal } from "@azure/msal-react";
 
 interface BreadcrumbItem {
   label: string;
@@ -23,6 +24,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onResetDemoData
 }) => {
+
+
+  const { accounts, instance } = useMsal();
+  const account = accounts[0];
   return (
     <header className="flex items-center justify-between gap-6 px-6 py-3.5 h-17 w-full">
       <div className="flex items-center gap-4 min-w-0">
@@ -50,6 +55,22 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-col text-right text-xs">
+          {account ? (
+            <>
+              <span className="font-semibold text-slate-900">
+                {account.name}
+              </span>
+              <span className="text-slate-500">
+                {account.username}
+              </span>
+            </>
+          ) : (
+            <span className="text-red-500">
+              No hay sesión Microsoft
+            </span>
+          )}
+        </div>
         {/* Factory Reset Demo Button */}
         <button
           onClick={onResetDemoData}

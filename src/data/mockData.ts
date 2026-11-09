@@ -77,9 +77,9 @@ export const INITIAL_BRANDS: Brand[] = [
     description: 'Pioneros mundiales en tecnología de radiofrecuencia monopolar a 448 kHz para bioestimulación celular, rejuvenecimiento facial y remodelación tisular profunda.',
     logoUrl: '/src/assets/images/brand_indiba_device_1793692727283.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/10/indiba-1.jpeg',
-    sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Indiba',
+    sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marcas/Marca_A',
     sharepointDriveId: 'b!Indiba_Graph_Drive_01',
-    sharepointFolderPath: '/General/Marketing/2026/Indiba',
+    sharepointFolderPath: '/Marcas/Indiba',
     createdAt: '2026-01-15'
   },
   {
@@ -92,7 +92,7 @@ export const INITIAL_BRANDS: Brand[] = [
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/mesoestetic.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Mesoestetic',
     sharepointDriveId: 'b!Mesoestetic_Graph_Drive_02',
-    sharepointFolderPath: '/General/Marketing/2026/Mesoestetic',
+    sharepointFolderPath: '/Marcas/Mesoestetic',
     createdAt: '2026-01-20'
   },
   {

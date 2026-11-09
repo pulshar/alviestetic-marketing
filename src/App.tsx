@@ -322,7 +322,6 @@ export default function App() {
           onBack={() => handleNavigate('brands')}
         />
       )}
-
       {/* PROMOTION DETAIL / ASSETS GALLERY VIEW */}
       {currentView === 'promotion_detail' && activeBrand && activePromotion && (
         <PromotionDetail
