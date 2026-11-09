@@ -20,7 +20,6 @@ import { CoursesCatalog } from './pages/Courses/CoursesCatalog';
 import { AdminDashboard } from './pages/Admin/AdminDashboard';
 import { ProfileSettings } from './pages/Profile/ProfileSettings';
 import { AssetLightbox } from './components/gallery/AssetLightbox';
-import { BrandModal } from './components/brands/BrandModal';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(() => authService.getCurrentUser());
@@ -45,8 +44,6 @@ export default function App() {
   // Global modals state
 
   const [lightboxAsset, setLightboxAsset] = useState<Asset | null>(null);
-
-  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -308,7 +305,6 @@ export default function App() {
           brands={authorizedBrands}
           promotions={authorizedPromotions}
           onNavigate={handleNavigate}
-          onOpenCreateBrand={() => setIsBrandModalOpen(true)}
         />
       )}
 
@@ -424,19 +420,6 @@ export default function App() {
           onClose={() => setLightboxAsset(null)}
         />
       )}
-
-
-      {/* Admin Brand Modal (from Brands Catalog) */}
-      <BrandModal
-        isOpen={isBrandModalOpen}
-        editingBrand={null}
-        onClose={() => setIsBrandModalOpen(false)}
-        onSave={(brandData) => {
-          brandService.createBrand(brandData);
-          handleRefreshData();
-          showToast(`Marca "${brandData.name}" creada con éxito.`);
-        }}
-      />
     </Layout>
   );
 }

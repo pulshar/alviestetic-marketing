@@ -1,7 +1,7 @@
 export type UserRole = 'admin' | 'client';
 export type ClientStatus = 'active' | 'inactive' | 'invited';
 export type AssetType = 'image' | 'video';
-export type AssetFormat = 'JPG' | 'PNG' | 'MP4' | 'WEBM';
+export type AssetFormat = 'JPG' | 'PNG' | 'MP4' | 'WEBM' | 'PDF' | 'ZIP' | 'FILE';
 
 export interface User {
   id: string;
@@ -25,7 +25,6 @@ export interface Brand {
   logoUrl: string;
   coverImageUrl: string;
   sharepointFolderUrl: string; // Prepared for future SharePoint integration
-  sharepointDriveId: string;   // Prepared for Microsoft Graph drive
   sharepointFolderPath: string;
   createdAt: string;
 }

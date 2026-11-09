@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ArrowLeft,
   Search,
@@ -8,12 +8,16 @@ import {
   Play,
   Archive,
   Image as ImageIcon,
-  HardDrive
+  HardDrive,
+  RefreshCw,
+  Loader2
 } from 'lucide-react';
 import { Promotion, Brand, Asset, User } from '../../types';
 import { assetService } from '../../services/assetService';
 import { AssetLightbox } from '../../components/gallery/AssetLightbox';
 import { ZipProgressModal } from '../../components/gallery/ZipProgressModal';
+import { useMsal } from '@azure/msal-react';
+import { getFolderContents, sharePointItemToAsset } from '../../services/sharepointService';
 
 interface PromotionDetailProps {
   promotion: Promotion;
@@ -26,10 +30,67 @@ interface PromotionDetailProps {
 export const PromotionDetail: React.FC<PromotionDetailProps> = ({
   promotion,
   brand,
-  assets,
+  assets: initialAssets,
   currentUser,
   onBack
 }) => {
+  const { instance, accounts } = useMsal();
+  const account = accounts[0];
+
+  const [liveAssets, setLiveAssets] = useState<Asset[] | null>(null);
+  const [loadingSharePoint, setLoadingSharePoint] = useState(false);
+  const [isSharePointConnected, setIsSharePointConnected] = useState(false);
+
+  // Load from SharePoint if user is authenticated and path is configured
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchFromSharePoint() {
+      if (!account || !promotion.sharepointSubfolderPath) {
+        setLiveAssets(null);
+        setIsSharePointConnected(false);
+        return;
+      }
+
+      try {
+        setLoadingSharePoint(true);
+        const items = await getFolderContents(
+          instance,
+          account,
+          promotion.sharepointSubfolderPath
+        );
+
+        const files = items.filter((item) => item.folder === undefined);
+        if (!cancelled && files.length > 0) {
+          const mapped = files.map((f) =>
+            sharePointItemToAsset(f, brand.id, promotion.id)
+          );
+          setLiveAssets(mapped);
+          setIsSharePointConnected(true);
+        } else if (!cancelled) {
+          setIsSharePointConnected(false);
+        }
+      } catch (err) {
+        console.warn('SharePoint subfolder not found, using fallback data:', err);
+        if (!cancelled) {
+          setIsSharePointConnected(false);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingSharePoint(false);
+        }
+      }
+    }
+
+    fetchFromSharePoint();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [instance, account, promotion.sharepointSubfolderPath, brand.id, promotion.id]);
+
+  const assets = liveAssets && liveAssets.length > 0 ? liveAssets : initialAssets;
+
   const [filterType, setFilterType] = useState<'all' | 'image' | 'video'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAssetIds, setSelectedAssetIds] = useState<string[]>([]);
@@ -122,9 +183,22 @@ export const PromotionDetail: React.FC<PromotionDetailProps> = ({
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">{promotion.title}</h1>
           <p className="text-sm text-slate-600 leading-relaxed">{promotion.description}</p>
-          <div className="flex items-center gap-2 mt-3 text-xs text-slate-500 font-mono">
-            <HardDrive size={13} className="text-blue-500" />
-            <span>SharePoint: {promotion.sharepointSubfolderPath}</span>
+          <div className="flex items-center gap-3 mt-3 text-xs text-slate-500 font-mono flex-wrap">
+            <div className="flex items-center gap-2">
+              <HardDrive size={13} className="text-blue-500" />
+              <span>SharePoint: {promotion.sharepointSubfolderPath}</span>
+            </div>
+            {loadingSharePoint && (
+              <span className="inline-flex items-center gap-1 text-[11px] text-blue-600">
+                <Loader2 size={12} className="animate-spin" />
+                Sincronizando...
+              </span>
+            )}
+            {isSharePointConnected && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+                En vivo desde SharePoint Online
+              </span>
+            )}
           </div>
         </div>
 
@@ -144,31 +218,28 @@ export const PromotionDetail: React.FC<PromotionDetailProps> = ({
         <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg">
           <button
             onClick={() => setFilterType('all')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${
-              filterType === 'all'
+            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${filterType === 'all'
                 ? 'bg-white text-slate-900 font-semibold shadow-xs'
                 : 'bg-transparent text-slate-600 hover:text-slate-900'
-            }`}
+              }`}
           >
             Todos ({assets.length})
           </button>
           <button
             onClick={() => setFilterType('image')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${
-              filterType === 'image'
+            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${filterType === 'image'
                 ? 'bg-white text-slate-900 font-semibold shadow-xs'
                 : 'bg-transparent text-slate-600 hover:text-slate-900'
-            }`}
+              }`}
           >
             Fotografías ({imageCount})
           </button>
           <button
             onClick={() => setFilterType('video')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${
-              filterType === 'video'
+            className={`px-3 py-1.5 rounded-md text-xs font-medium border-none cursor-pointer whitespace-nowrap transition-all ${filterType === 'video'
                 ? 'bg-white text-slate-900 font-semibold shadow-xs'
                 : 'bg-transparent text-slate-600 hover:text-slate-900'
-            }`}
+              }`}
           >
             Vídeos ({videoCount})
           </button>
@@ -213,18 +284,17 @@ export const PromotionDetail: React.FC<PromotionDetailProps> = ({
           return (
             <div
               key={asset.id}
-              className={`bg-white rounded-xl border overflow-hidden flex flex-col transition-all relative cursor-pointer hover:border-slate-300 hover:shadow-md ${
-                isSelected
+              className={`bg-white rounded-xl border overflow-hidden flex flex-col transition-all relative cursor-pointer hover:border-slate-300 hover:shadow-md ${isSelected
                   ? 'border-blue-600 shadow-[0_0_0_2px_rgba(37,99,235,0.2)]'
                   : 'border-slate-200'
-              }`}
+                }`}
               onClick={() => setActiveLightboxAsset(asset)}
             >
               {/* Checkbox for selection */}
               <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => {}}
+                onChange={() => { }}
                 onClick={(e) => handleToggleSelect(asset.id, e)}
                 className="absolute top-3 left-3 z-10 w-5 h-5 cursor-pointer accent-blue-600"
                 title="Seleccionar para descarga múltiple"

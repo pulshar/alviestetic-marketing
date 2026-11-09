@@ -21,11 +21,9 @@ import {
 } from 'lucide-react';
 import { User, Brand, Promotion, ActivityLog, ClientStatus, Course, TutorLmsConfig } from '../../types';
 import { clientService, CreateClientDTO } from '../../services/clientService';
-import { brandService } from '../../services/brandService';
 import { storageService } from '../../services/storageService';
 import { courseService } from '../../services/courseService';
 import { ClientModal } from '../../components/clients/ClientModal';
-import { BrandModal } from '../../components/brands/BrandModal';
 
 interface AdminDashboardProps {
   currentUser: User;
@@ -82,10 +80,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<User | null>(null);
 
-  // Brand modal state
-  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
-  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
-
   // Calculations
   const activeClientsCount = clients.filter((c) => c.status === 'active').length;
 
@@ -130,26 +124,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
-  // Brand Actions
-  const handleOpenCreateBrand = () => {
-    setEditingBrand(null);
-    setIsBrandModalOpen(true);
-  };
-
-  const handleOpenEditBrand = (brand: Brand) => {
-    setEditingBrand(brand);
-    setIsBrandModalOpen(true);
-  };
-
-  const handleSaveBrand = (data: any) => {
-    if (editingBrand) {
-      brandService.updateBrand(editingBrand.id, data);
-    } else {
-      brandService.createBrand(data);
-    }
-    onRefreshData();
-  };
-
   return (
     <div className="flex flex-col gap-8">
       {/* Top Title & Sub navigation tabs */}
@@ -171,15 +145,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             >
               <Plus size={15} />
               Nuevo Cliente
-            </button>
-          )}
-          {currentTab === 'brands' && (
-            <button
-              onClick={handleOpenCreateBrand}
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-xs cursor-pointer"
-            >
-              <Plus size={15} />
-              Nueva Marca
             </button>
           )}
         </div>
@@ -537,19 +502,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       {clientsWithAccess.length} clientes autorizados
                     </div>
 
-                    <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <button
-                        onClick={() => handleOpenEditBrand(brand)}
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-900 inline-flex items-center gap-1 cursor-pointer"
-                      >
-                        <Edit2 size={12} /> Editar marca & SP
-                      </button>
-
+                    <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-end">
                       <button
                         onClick={() => onNavigateToBrand(brand.id)}
-                        className="text-xs font-semibold text-blue-600 hover:underline cursor-pointer"
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
                       >
-                        Ver promociones →
+                        Explorar marca en SharePoint →
                       </button>
                     </div>
                   </div>
@@ -607,7 +565,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="space-y-6">
           {/* Integration Configuration Card */}
           <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                   <GraduationCap size={22} />
@@ -796,13 +754,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         availableBrands={brands}
         onClose={() => setIsClientModalOpen(false)}
         onSave={handleSaveClient}
-      />
-
-      <BrandModal
-        isOpen={isBrandModalOpen}
-        editingBrand={editingBrand}
-        onClose={() => setIsBrandModalOpen(false)}
-        onSave={handleSaveBrand}
       />
     </div>
   );

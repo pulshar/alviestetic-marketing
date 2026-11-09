@@ -78,7 +78,6 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_indiba_device_1793692727283.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/10/indiba-1.jpeg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marcas/Marca_A',
-    sharepointDriveId: 'b!Indiba_Graph_Drive_01',
     sharepointFolderPath: '/Marcas/Indiba',
     createdAt: '2026-01-15'
   },
@@ -91,7 +90,6 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_mesoestetic_cosmetics_1793692727373.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/mesoestetic.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Mesoestetic',
-    sharepointDriveId: 'b!Mesoestetic_Graph_Drive_02',
     sharepointFolderPath: '/Marcas/Mesoestetic',
     createdAt: '2026-01-20'
   },
@@ -104,8 +102,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_phyts_organic_1793692728581.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/1920x600-baniere-homepage-printemps.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Phyts',
-    sharepointDriveId: 'b!Phyts_Graph_Drive_03',
-    sharepointFolderPath: '/General/Marketing/2026/Phyts',
+    sharepointFolderPath: '/Marcas/Phyts',
     createdAt: '2026-02-01'
   },
   {
@@ -117,8 +114,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_naggura_bed_1793692728849.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/4-foto-home-naggura-productos-gamas-13-06-2022-01_to_webp_09-10-2023-09-49-33-scaled.webp',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Naggura',
-    sharepointDriveId: 'b!Naggura_Graph_Drive_04',
-    sharepointFolderPath: '/General/Marketing/2026/Naggura',
+    sharepointFolderPath: '/Marcas/Naggura',
     createdAt: '2026-02-10'
   },
   {
@@ -130,8 +126,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/12/lb145987-scaled-1.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Starvac',
-    sharepointDriveId: 'b!Starvac_Graph_Drive_05',
-    sharepointFolderPath: '/General/Marketing/2026/Starvac',
+    sharepointFolderPath: '/Marcas/Starvac',
     createdAt: '2026-02-15'
   },
   {
@@ -143,8 +138,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/portada-innovapro.png',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Innovapro',
-    sharepointDriveId: 'b!Innovapro_Graph_Drive_06',
-    sharepointFolderPath: '/General/Marketing/2026/Innovapro',
+    sharepointFolderPath: '/Marcas/Innovapro',
     createdAt: '2026-02-20'
   },
   {
@@ -156,8 +150,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/gernetic.png',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Gernetic',
-    sharepointDriveId: 'b!Gernetic_Graph_Drive_07',
-    sharepointFolderPath: '/General/Marketing/2026/Gernetic',
+    sharepointFolderPath: '/Marcas/Gernetic',
     createdAt: '2026-03-01'
   },
   {
@@ -169,8 +162,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/corporal-basic.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/DLucanni',
-    sharepointDriveId: 'b!DLucanni_Graph_Drive_08',
-    sharepointFolderPath: '/General/Marketing/2026/DLucanni',
+    sharepointFolderPath: '/Marcas/DLucanni',
     createdAt: '2026-03-05'
   },
   {
@@ -182,8 +174,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/portada-marca.png',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Sorisa',
-    sharepointDriveId: 'b!Sorisa_Graph_Drive_09',
-    sharepointFolderPath: '/General/Marketing/2026/Sorisa',
+    sharepointFolderPath: '/Marcas/Sorisa',
     createdAt: '2026-03-10'
   },
   {
@@ -195,8 +186,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/portada-weelko.png',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Weelko',
-    sharepointDriveId: 'b!Weelko_Graph_Drive_10',
-    sharepointFolderPath: '/General/Marketing/2026/Weelko',
+    sharepointFolderPath: '/Marcas/Weelko',
     createdAt: '2026-03-15'
   },
   {
@@ -208,8 +198,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/alvidepil-marca2.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Alvidepil',
-    sharepointDriveId: 'b!Alvidepil_Graph_Drive_11',
-    sharepointFolderPath: '/General/Marketing/2026/Alvidepil',
+    sharepointFolderPath: '/Marcas/Alvidepil',
     createdAt: '2026-03-20'
   },
   {
@@ -221,8 +210,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1608248597359-71a2a4b87c7b?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/home-slide0.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Wishpro',
-    sharepointDriveId: 'b!Wishpro_Graph_Drive_12',
-    sharepointFolderPath: '/General/Marketing/2026/Wishpro',
+    sharepointFolderPath: '/Marcas/Wishpro',
     createdAt: '2026-03-25'
   },
   {
@@ -234,8 +222,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_visioderm_diag_1793693215149.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/12/fond-degrade-vdc-site-visage2.webp',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/Visioderm',
-    sharepointDriveId: 'b!Visioderm_Graph_Drive_13',
-    sharepointFolderPath: '/General/Marketing/2026/Visioderm',
+    sharepointFolderPath: '/Marcas/Visioderm',
     createdAt: '2026-03-28'
   },
   {
@@ -247,8 +234,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: 'https://images.unsplash.com/photo-1512290900672-1f55b9679199?w=800&auto=format&fit=crop&q=80',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2025/12/electrolisis.jpg',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/SilhouetTone',
-    sharepointDriveId: 'b!SilhouetTone_Graph_Drive_14',
-    sharepointFolderPath: '/General/Marketing/2026/SilhouetTone',
+    sharepointFolderPath: '/Marcas/SilhouetTone',
     createdAt: '2026-04-01'
   },
   {
@@ -260,8 +246,7 @@ export const INITIAL_BRANDS: Brand[] = [
     logoUrl: '/src/assets/images/brand_innutricosmetica_1793693214883.jpg',
     coverImageUrl: 'https://alviestetic.es/wp-content/uploads/2023/11/in-2.png',
     sharepointFolderUrl: 'https://alviestetic.sharepoint.com/sites/Marketing/Marcas/IN_Nutricosmetica',
-    sharepointDriveId: 'b!IN_Nutricosmetica_Graph_Drive_15',
-    sharepointFolderPath: '/General/Marketing/2026/IN_Nutricosmetica',
+    sharepointFolderPath: '/Marcas/IN_Nutricosmetica',
     createdAt: '2026-04-05'
   }
 ];

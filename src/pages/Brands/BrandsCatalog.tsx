@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, ArrowRight, Search, Plus, HardDrive } from 'lucide-react';
+import { Layers, ArrowRight, Search, HardDrive } from 'lucide-react';
 import { Brand, Promotion, User } from '../../types';
 
 interface BrandsCatalogProps {
@@ -7,15 +7,13 @@ interface BrandsCatalogProps {
   brands: Brand[];
   promotions: Promotion[];
   onNavigate: (view: string, brandId?: string, promoId?: string) => void;
-  onOpenCreateBrand?: () => void;
 }
 
 export const BrandsCatalog: React.FC<BrandsCatalogProps> = ({
   currentUser,
   brands,
   promotions,
-  onNavigate,
-  onOpenCreateBrand
+  onNavigate
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const isAdmin = currentUser.role === 'admin';
@@ -35,20 +33,10 @@ export const BrandsCatalog: React.FC<BrandsCatalogProps> = ({
           </h1>
           <p className="text-sm text-slate-500 max-w-2xl">
             {isAdmin
-              ? 'Gestión centralizada de marcas y sincronización con SharePoint Online.'
+              ? 'Consulta las marcas registradas y sus carpetas en SharePoint Online.'
               : 'Explora las marcas oficiales a las que tienes acceso para descargar sus activos digitales.'}
           </p>
         </div>
-
-        {isAdmin && onOpenCreateBrand && (
-          <button
-            onClick={onOpenCreateBrand}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors shadow-xs self-start sm:self-auto cursor-pointer"
-          >
-            <Plus size={15} />
-            Nueva Marca
-          </button>
-        )}
       </div>
 
       {/* Search Bar */}
